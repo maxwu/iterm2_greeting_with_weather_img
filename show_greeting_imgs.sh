@@ -46,6 +46,9 @@ function print_image() {
 echo "[31mHello $LOGNAME, make it a great day! ♘  [37;0m"
 echo 
 # Weather Brief
+# The geoip db on wttr.in is no correct with Lower Hutt vodafone IP range.
+# Here a city name is specified. 
+# For a general using, just curl wttr.in 2>/dev/null | head -n 17 will be fine.
 curl wttr.in/lower+hutt 2>/dev/null | head -n 17
 echo 
 
