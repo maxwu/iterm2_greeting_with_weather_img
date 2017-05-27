@@ -9,18 +9,40 @@ I made it to let the terminal show my daughters picture every time I open termin
 
 ## Usage
 
-So far it just support one parameter. `$1` is the folder of picture files. Here is a screenshot of sample. It is recommend to add command into shell profile to make a happy greeting.
+It is recommend to add command into shell profile to make a happy greeting. Here is the line in my bash_profile on Mac, `~/devel/iterm2_greeting_with_weather_img/show_greeting_imgs.sh -c lower+hutt -p ~/Pictures/murphey-imgs/ -w 40`.
 
-`./show_greeting_imgs.sh ~/Pictures/`
-
+Below is a screenshot of sample of running in iTerm2 on Mac.
+`./show_greeting_imgs.sh -p ~/Pictures/`
 ![](https://github.com/maxwu/iterm2_greeting_with_weather_img/raw/master/Iterm2_greeting_img_20170527_5.png)
 
-Each time it will randomly pick up a picure from the given folder and show it inline with iTerm image extension protocol.
+☀ If current terminal window width is smaller than 100 cols, it will just show a daily weather forecast but does not show the full version of each 6 hr weather forecast.
+
+♘ Each time it will randomly pick up a picure from the given folder and show it inline with iTerm image extension protocol. 
+If no folder is specified, it will try ~/Pictures by default. In cases no file can be selected, imgcat step will be bypassed.
+
+So far a few options are supported, `-h` will show full description.
+
+```shell
+./show_greeting_imgs.sh [-c city_name_plus_as_space]|[-p picture_folder][-w picture_width]|[-q]|[-h]
+ -c: city name, "lower+hutt" for Lower Hutt city in Wellington
+     In noraml cases, wttr can detect location from IP
+     So it is default to none and wttr automatically look up GeoIP DB.
+     Specify city name only if the GeoIP location is not expected.
+ -p: folder to pick up picture, default to ~/Pictures
+ -w: picture width in cols, default to 32
+ -q: quiet mode weather forecast, just for the day, not for every 6hrs
+     If current terminal window width is less than 100 cols,
+     This mode will automatically activate.
+ -h: show this message and exit.
+```
+
+Sometimes the GeoIP does not show the exact correct place as I met with Vodaphone landline in Lower Hutt. So `-c` is provided. Please be kindly reminded space shall be replaced with `+`.
 
 ## Future Works
 
 Would feel more comfortable to rewrite in Python and add cli options as fetch a random wall-paper from Bing. 
 
+Plan to add quote for the day to randomly show quote from \<Criminal Minds\>.
 
 ## Reference
 
