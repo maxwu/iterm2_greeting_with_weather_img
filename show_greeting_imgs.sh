@@ -41,18 +41,81 @@ function print_image() {
     printf '\n'
 }
 
+function print_help_msg(){
+    echo "$0 [-c city_name_plus_as_space]|[-p picture_folder][-w picture_width]|[-q]|[-h]"
+    echo " -c: city name, \"lower+hutt\" for Lower Hutt city in Wellington"
+    echo "     In noraml cases, wttr can detect location from IP"
+    echo "     So it is default to none and wttr automatically look up GeoIP DB."
+    echo "     Specify city name only if the GeoIP location is not expected."
+    echo " -p: folder to pick up picture, default to ~/Pictures"
+    echo " -w: picture width in cols, default to 32"
+    echo " -q: quiet mode weather forecast, just for the day, not for every 6hrs"
+    echo "     If current terminal window width is less than 100 cols, "
+    echo "     This mode will automatically activate."
+    echo " -h: show this message and exit."
+}
+
 # __main__
-# Greeting
+QUIET=""
+CITY=""
+FOLDER=~/Pictures
+WIDTH="32"
+# Parse with getopts
+while getopts ":c:p:w:qh" opt; do
+    case $opt in
+      c)
+	# echo "city is ${OPTARG}"
+	CITY=$OPTARG	
+	;;
+      p) 
+	# echo "pic folder is ${OPTARG}"
+	FOLDER=$OPTARG	
+	;;
+      w) 
+	# echo "width is ${OPTARG}"
+	WIDTH=$OPTARG
+	;;
+      q)
+	# echo "quiet mode wttr"
+	QUIET="1"
+	;;
+      h | \?)
+	print_help_msg
+	exit 0
+	;;
+    esac
+done
+
+# Show greeting
+echo 
 echo "[31mHello $LOGNAME, make it a great day! ♘  [37;0m"
 echo 
+
 # Weather Brief
-# The geoip db on wttr.in is no correct with Lower Hutt vodafone IP range.
-# Here a city name is specified. 
+# GeoIP DB might run an incorrect IP range for Wellington Vodafone landlines, here city name is specified.
 # For a general using, just curl wttr.in 2>/dev/null | head -n 17 will be fine.
-curl wttr.in/lower+hutt 2>/dev/null | head -n 17
+# opt_city="lower+hutt"
+
+term_width=$(tput cols)
+if [ "$term_width" -lt "100" ]; then
+    # In narrow terminal windows, just show a day forecast
+    QUIET="1"
+fi
+
+if [ -n "$QUIET" ]; then
+    shown_lines=7
+else
+    # Including wttr forecast for different times in day
+    shown_lines=17
+fi
+
+# Another way to specify quiet mode with wttr
+# curl wttr.in/lower+hutt?q?0
+
+curl wttr.in/$CITY 2>/dev/null | head -n $shown_lines
+
 echo 
 
-FOLDER=$1
 img_list=($(ls -d $FOLDER/* | xargs))
 
 # seed the random generator
@@ -60,7 +123,9 @@ RANDOM=$$$(date +%s)
 
 selected=${img_list[$RANDOM % ${#img_list[@]} ]}
 # echo "img picked: $selected"
-#~/.iterm2/imgcat $selected
-print_image $selected
+if [ -n "$selected" ]; then
+    print_image $selected
+fi 
 echo 
 echo "Let rock it off~"
+echo "✐ + ⌛" 
