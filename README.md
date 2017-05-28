@@ -46,4 +46,5 @@ Plan to add quote for the day to randomly show quote from \<Criminal Minds\>.
 
 ## Reference
 
-[iTerm2 imgcat protocol](https://www.iterm2.com/documentation-images.html)
+ - [iTerm2 imgcat protocol](https://www.iterm2.com/documentation-images.html)
+ - [Tech Blog and Screenshot Demo](https://maxwu.github.io/2017/05/28/Greeting-Shell-script-with-Picture-show-and-Weathre-Forecast/)
