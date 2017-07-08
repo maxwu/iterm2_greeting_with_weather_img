@@ -127,5 +127,5 @@ if [ -n "$selected" ]; then
     print_image $selected
 fi 
 echo 
-echo "Let rock it off~"
+echo "Let's rock it off~"
 echo "✐ + ⌛" 
